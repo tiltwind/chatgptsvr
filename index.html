@@ -1,0 +1,34 @@
+<html>
+<head><title>GPT3 Chat Server</title></head>
+<body>
+<h1>GPT3 Chat Server</h1>
+<input type="text" size="100" id="message"/>
+<button onclick="send()">Send</button>
+<div id="answer">
+    <ul id="answer_list">
+        <li style="display: none"></li>
+    </ul>
+</div>
+</body>
+</html>
+<script>
+    function send() {
+        let msg = document.getElementById("message").value;
+        if (msg.length < 5) {
+            alert("消息内容太短了");
+            return;
+        }
+        let urlencoded = encodeURIComponent(msg);
+        fetch("http://jvmgopgt3.sv1.k9s.run:2271/?q=" + urlencoded).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            console.log(text);
+
+            let li = document.createElement("li");
+            li.innerHTML = "<h3>" + msg + "</h3>" + text;
+
+            let answer_list = document.getElementById("answer_list");
+            answer_list.childNodes.item(0).before(li);
+        });
+    }
+</script>
