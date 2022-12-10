@@ -1,12 +1,12 @@
 <html>
 <head><title>GPT3 Chat Server</title></head>
 <style>
-    body {
-        size: 10px;
-    }
-
     div {
         white-space: pre-wrap;
+    }
+
+    input {
+        font-size: 24px;
     }
 
     h3 {
@@ -19,8 +19,9 @@
 </style>
 <body>
 <h1>GPT3 Chat Server</h1>
-<input type="text" size="100" id="message"/>
-<button onclick="send()">Send</button>
+<form onsubmit="send();return false;">
+    <input type="text" style="width: 400px;" id="message"/><br>
+</form>
 <div id="answer">
     <ul id="answer_list">
         <li style="display: none"></li>
@@ -35,6 +36,7 @@
             alert("消息内容太短了");
             return;
         }
+        document.getElementById("message").value = "";
 
 
         let li = document.createElement("li");
