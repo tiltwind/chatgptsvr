@@ -27,21 +27,24 @@ func (G GPT3Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request
 		}
 	}()
 
+	writer.Header().Set("Access-Control-Allow-Origin", "*")
+	
 	question := request.URL.Query().Get("q")
 	if question == "" {
 		writer.Write([]byte("pls ask your question"))
 		return
 	}
 
-	resp, err := gptRequest(question)
+	answer, err := gptRequest(question)
 	if err != nil {
 		responseError(writer, err)
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	writer.Write([]byte(resp))
+	fmt.Printf("question: %s, answer: %s\n", question, answer)
+
+	writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	writer.Write([]byte(answer))
 }
 
 func responseError(writer http.ResponseWriter, err any) {

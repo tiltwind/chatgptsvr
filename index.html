@@ -1,5 +1,22 @@
 <html>
 <head><title>GPT3 Chat Server</title></head>
+<style>
+    body {
+        size: 10px;
+    }
+
+    div {
+        white-space: pre-wrap;
+    }
+
+    h3 {
+        color: #0000FF;
+    }
+
+    li {
+        border: 1px solid #0000FF;
+    }
+</style>
 <body>
 <h1>GPT3 Chat Server</h1>
 <input type="text" size="100" id="message"/>
@@ -14,24 +31,33 @@
 <script>
     function send() {
         let msg = document.getElementById("message").value;
-        if (msg.length < 5) {
+        if (msg.length < 3) {
             alert("消息内容太短了");
             return;
         }
-        let urlencoded = encodeURIComponent(msg);
-        fetch("http://jvmgopgt3.sv1.k9s.run:2271/?q=" + urlencoded, {
+
+
+        let li = document.createElement("li");
+        li.innerHTML = "<h3>" + msg + "</h3>";
+        let answer_list = document.getElementById("answer_list");
+        answer_list.insertBefore(li, answer_list.childNodes[0])
+
+        fetch("http://jvmgopgt3.sv1.k9s.run:2271/?q=" + encodeURIComponent(msg), {
             "method": "GET",
             "mode": "cors"
-        }).then(function (response) {
+        }).then((response) => {
             return response.text();
-        }).then(function (text) {
+        }).then((text) => {
             console.log(text);
+            let answer = document.createElement("div");
+            answer.innerHTML = text;
+            li.append(answer);
 
-            let li = document.createElement("li");
-            li.innerHTML = "<h3>" + msg + "</h3>" + text;
-
-            let answer_list = document.getElementById("answer_list");
-            answer_list.childNodes.item(0).before(li);
+        }).catch(err => {
+            console.log(err);
+            let answer = document.createElement("div");
+            answer.innerHTML = err;
+            li.append(answer);
         });
     }
 </script>

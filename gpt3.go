@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -63,7 +64,16 @@ func gptRequest(question string) (string, error) {
 		return "No Response", nil
 	}
 
-	return gpt3Reps.Choices[0].Text, nil
+	answer := gpt3Reps.Choices[0].Text
+	if strings.HasPrefix(answer, "口") {
+		answer = strings.TrimPrefix(answer, "口")
+	}
+
+	for strings.HasPrefix(answer, "\n") {
+		answer = strings.TrimPrefix(answer, "\n")
+	}
+
+	return answer, nil
 }
 
 const (
